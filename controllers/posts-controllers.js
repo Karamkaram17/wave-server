@@ -62,13 +62,15 @@ const getPostsForUserAndFriends = async (req, res) => {
 };
 
 const createPost = async (req, res) => {
-  const { description, picture, location } = req.body;
+  let { description, picture, location } = req.body;
   const user = req.user;
-  if (!description || !location || !picture) {
+  if (!picture) {
     return res.status(400).json({
-      message: "description ,location and picture are required",
+      message: " picture is required",
     });
   }
+  if (!description) description = "";
+  if (!location) location = "";
 
   try {
     const post = await Post.create({
@@ -168,9 +170,13 @@ const comment = async (req, res) => {
       { $push: { comments: comment } },
       { new: true, useFindAndModify: false }
     );
+    const commentId = post.comments.find(
+      (c) => c.author.toString() === user._id && c.content === content
+    )._id;
 
-    res.status(200).json({ success: true });
+    res.status(200).json({ id: commentId });
   } catch (error) {
+    console.log(error);
     res.status(500).json(error);
   }
 };
