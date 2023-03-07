@@ -3,14 +3,14 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const HandleRegistration = async (req, res) => {
-  const { firstName, lastName, email, password, picture, location } = req.body;
-  if (!firstName || !lastName || !email || !password || !location || !picture) {
+  const { firstName, lastName, email, password, picture } = req.body;
+  let location = req.body.location;
+  if (!firstName || !lastName || !email || !password || !picture) {
     return res.status(400).json({
-      message:
-        "firstName ,lastName ,email ,location,picture and password are required",
+      message: "firstName ,lastName ,email ,picture and password are required",
     });
   }
-
+  if (!location) location = "";
   if (password.length < 5) {
     return res
       .status(400)
