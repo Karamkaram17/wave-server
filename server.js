@@ -23,6 +23,10 @@ app.use("/logout", require("./routes/logout-route"));
 app.use("/users", require("./routes/api/user-route"));
 app.use("/posts", require("./routes/api/post-route"));
 
+app.get("/scale", (req, res) => {
+  res.status(200).json({ message: "hi" });
+});
+
 app.all("*", custom404);
 
 const start = async () => {
